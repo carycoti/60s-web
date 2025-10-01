@@ -139,7 +139,7 @@
                 {% for item in news_list %}
                     <a href="{{ item.url }}" target="_blank" class="news-item">
                         {% if item.image_url %}
-                        <img src="{{ item.image_url }}" alt="{{ item.title }}" class="item-image">
+                        <img src="{{ item.image_url }}" alt="{{ item.title }}" class="item-image" referrerpolicy="no-referrer">
                         {% endif %}
                         <div class="item-content">
                             <h2>{{ item.title }}</h2>

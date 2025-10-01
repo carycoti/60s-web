@@ -13,10 +13,11 @@ def read_root():
     """Fetches news, groups them by source, generates a briefing, and returns it as HTML."""
     news_items = fetch_news()
     
-    # Group items by source
+    # Group items by source and limit to 21 per source
     grouped_items = defaultdict(list)
     for item in news_items:
-        grouped_items[item.source_display_name].append(item)
+        if len(grouped_items[item.source_display_name]) < 21:
+            grouped_items[item.source_display_name].append(item)
     
     html_content = generate_briefing(grouped_items)
     return Response(content=html_content, media_type="text/html")

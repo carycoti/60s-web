@@ -7,6 +7,7 @@ from typing import List, Dict
 from datetime import datetime
 from src.models.news_item import NewsItem
 from pydantic import ValidationError
+from bs4 import BeautifulSoup
 
 def fetch_news(config_path: str = "config.json") -> List[NewsItem]:
     """Fetches news items from sources defined in the config file and de-duplicates them."""
@@ -44,7 +45,7 @@ def _fetch_from_rss(source: Dict) -> List[NewsItem]:
     feed = feedparser.parse(source.get('url'))
     source_name = feed.feed.get('title', 'Unknown RSS')
     items = []
-    for entry in feed.entries[:20]:
+    for entry in feed.entries[:50]:
         image_url = None
         if 'media_content' in entry and entry.media_content:
             image_url = entry.media_content[0].get('url')
@@ -52,9 +53,22 @@ def _fetch_from_rss(source: Dict) -> List[NewsItem]:
         published_parsed = entry.get('published_parsed')
         published_date = datetime.fromtimestamp(time.mktime(published_parsed)) if published_parsed else None
 
-        content = entry.get('summary', 'No Content')
-        # Sanitize HTML content by removing all attributes from all tags
-        content = re.sub(r'<(\w+)\s+.*?>', r'<\1>', content)
+        summary_html = entry.get('summary', 'No Content')
+        soup = BeautifulSoup(summary_html, 'html.parser')
+        
+        # Get text from all paragraphs and join them with a newline
+        paragraphs = [p.get_text() for p in soup.find_all('p')]
+        content = '\n'.join(paragraphs)
+        
+        # If there are no p tags, just get all the text
+        if not content:
+            content = soup.get_text()
+
+        # If no image was found in media_content, try to find one in the summary
+        if not image_url:
+            first_image = soup.find('img')
+            if first_image and first_image.get('src'):
+                image_url = first_image.get('src')
 
         items.append(NewsItem(
             title=entry.get('title', 'No Title'),
@@ -92,8 +106,8 @@ def _fetch_from_api(source: Dict) -> List[NewsItem]:
         elif isinstance(main_data, list):
             news_list = main_data
         
-        news_list = news_list[:20]
-        print(f"Found {len(news_list)} items to process (capped at 20).")
+        news_list = news_list[:50]
+        print(f"Found {len(news_list)} items to process.")
 
         items = []
         for item in news_list:
