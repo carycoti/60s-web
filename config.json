@@ -1,0 +1,24 @@
+{
+  "sources": [
+    {
+      "type": "API",
+      "name": "60秒看世界",
+      "url": "http://192.168.1.250:4399/v2/60s"
+    },
+    {
+      "type": "API",
+      "name": "今日头条",
+      "url": "http://192.168.1.250:4399/v2/toutiao"
+    },
+    {
+      "type": "API",
+      "name": "百度热搜",
+      "url": "http://192.168.1.250:4399/v2/baidu/hot"
+    },
+    {
+      "type": "RSS",
+      "name": "HelloGitHub",
+      "url": "https://hellogithub.com/rss"
+    }
+  ]
+}

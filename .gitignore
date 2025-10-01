@@ -1,0 +1,20 @@
+# Environments
+.venv/
+__pycache__/
+*.pyc
+
+# Lock files
+uv.lock
+
+# Python version
+.python-version
+
+# IDEs
+.vscode/
+.idea/
+
+# Gemini
+.gemini/
+.specify/
+specs/
+GEMINI.md

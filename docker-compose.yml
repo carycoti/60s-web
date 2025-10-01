@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    container_name: 60s-web
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - ./config.json:/app/config.json
+    restart: always

@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+requests
+feedparser
+jinja2
+pytest
