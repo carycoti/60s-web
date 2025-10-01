@@ -108,10 +108,15 @@
             font-size: 1.1em;
             color: #34495e;
         }
-        .item-content p {
+        .content-clamp {
             font-size: 0.9em;
             color: #555;
-            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 6;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -139,7 +144,7 @@
                         <div class="item-content">
                             <h2>{{ item.title }}</h2>
                             {% if item.content %}
-                            <p>{{ item.content }}</p>
+                            <div class="content-clamp">{{ item.content }}</div>
                             {% endif %}
                         </div>
                     </a>
@@ -148,6 +153,8 @@
             </div>
         {% endfor %}
     </div>
+
+
 
     <script>
         function openTab(evt, tabId) {

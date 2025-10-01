@@ -1,4 +1,5 @@
 import json
+import re
 import time
 import requests
 import feedparser
@@ -51,9 +52,13 @@ def _fetch_from_rss(source: Dict) -> List[NewsItem]:
         published_parsed = entry.get('published_parsed')
         published_date = datetime.fromtimestamp(time.mktime(published_parsed)) if published_parsed else None
 
+        content = entry.get('summary', 'No Content')
+        # Sanitize HTML content by removing all attributes from all tags
+        content = re.sub(r'<(\w+)\s+.*?>', r'<\1>', content)
+
         items.append(NewsItem(
             title=entry.get('title', 'No Title'),
-            content=entry.get('summary', 'No Content'),
+            content=content,
             url=entry.get('link'),
             image_url=image_url,
             source_name=source_name,

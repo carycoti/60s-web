@@ -6,6 +6,11 @@
       "url": "http://192.168.1.250:4399/v2/60s"
     },
     {
+      "type": "RSS",
+      "name": "参考消息",
+      "url": "https://rsshub.umzzz.com/cankaoxiaoxi/column/zhongguo"
+    },
+    {
       "type": "API",
       "name": "今日头条",
       "url": "http://192.168.1.250:4399/v2/toutiao"
