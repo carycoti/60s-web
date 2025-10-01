@@ -4,3 +4,4 @@ requests
 feedparser
 jinja2
 pytest
+bs4
