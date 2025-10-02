@@ -8,6 +8,7 @@ from datetime import datetime
 from src.models.news_item import NewsItem
 from pydantic import ValidationError
 from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
 def fetch_news(config_path: str = "config.json") -> List[NewsItem]:
     """Fetches news items from sources defined in the config file and de-duplicates them."""
@@ -44,14 +45,53 @@ def _fetch_from_rss(source: Dict) -> List[NewsItem]:
     """Fetches news items from an RSS feed."""
     feed = feedparser.parse(source.get('url'))
     source_name = feed.feed.get('title', 'Unknown RSS')
+    print(f"Found {len(feed.entries)} entries for {source_name}")
     items = []
     for entry in feed.entries[:50]:
         image_url = None
-        if 'media_content' in entry and entry.media_content:
-            image_url = entry.media_content[0].get('url')
-        
-        published_parsed = entry.get('published_parsed')
-        published_date = datetime.fromtimestamp(time.mktime(published_parsed)) if published_parsed else None
+
+        source_url = source.get('url', '')
+
+        # Source-specific logic
+        if 'tmtpost.com' in source_url:
+            content_html = entry.get('content', [{}])[0].get('value', '')
+            if content_html:
+                soup = BeautifulSoup(content_html, 'html.parser')
+                image_tag = soup.find('img')
+                if image_tag and image_tag.get('src'):
+                    image_url = image_tag.get('src')
+        elif 'sspai.com' in source_url or 'cankaoxiaoxi.com' in source_url:
+            summary_html = entry.get('summary', '')
+            if summary_html:
+                soup = BeautifulSoup(summary_html, 'html.parser')
+                image_tag = soup.find('img')
+                if image_tag and image_tag.get('src'):
+                    image_url = image_tag.get('src')
+        else: # Generic fallback
+            if 'media_content' in entry and entry.media_content:
+                image_url = entry.media_content[0].get('url')
+            
+            if not image_url:
+                html_to_search = entry.get('summary', '')
+                if not html_to_search:
+                    content_list = entry.get('content', [])
+                    if content_list:
+                        html_to_search = content_list[0].get('value', '')
+
+                if html_to_search:
+                    soup = BeautifulSoup(html_to_search, 'html.parser')
+                    image_tag = soup.find('img')
+                    if image_tag and image_tag.get('src'):
+                        image_url = image_tag.get('src')
+
+        # Convert relative image URLs to absolute
+        if image_url and not image_url.startswith(('http://', 'https://')):
+            try:
+                base_url = entry.link
+                image_url = urljoin(base_url, image_url)
+            except Exception as e:
+                print(f"Error converting relative URL to absolute: {e}")
+                image_url = None
 
         summary_html = entry.get('summary', 'No Content')
         soup = BeautifulSoup(summary_html, 'html.parser')
@@ -64,11 +104,8 @@ def _fetch_from_rss(source: Dict) -> List[NewsItem]:
         if not content:
             content = soup.get_text()
 
-        # If no image was found in media_content, try to find one in the summary
-        if not image_url:
-            first_image = soup.find('img')
-            if first_image and first_image.get('src'):
-                image_url = first_image.get('src')
+        published_parsed = entry.get('published_parsed')
+        published_date = datetime.fromtimestamp(time.mktime(published_parsed)) if published_parsed else None
 
         items.append(NewsItem(
             title=entry.get('title', 'No Title'),

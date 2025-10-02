@@ -69,16 +69,15 @@
             display: block;
         }
         .news-grid {
-            column-count: 3;
-            column-gap: 1.5em;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5em;
         }
         .news-item {
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            display: inline-block;
-            width: 100%;
             margin-bottom: 1.5em;
             transition: transform 0.2s ease-in-out;
         }
@@ -137,7 +136,7 @@
                 {% for item in news_list %}
                     <a href="{{ item.url }}" target="_blank" class="news-item">
                         {% if item.image_url %}
-                        <img src="{{ item.image_url }}" alt="{{ item.title }}" class="item-image" referrerpolicy="no-referrer">
+                        <img src="{{ item.image_url }}" alt="{{ item.title }}" class="item-image">
                         {% endif %}
                         <div class="item-content">
                             <h2>{{ item.title }}</h2>
