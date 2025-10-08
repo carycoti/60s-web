@@ -8,7 +8,7 @@
     {
       "type": "RSS",
       "name": "参考消息",
-      "url": "https://rsshub.umzzz.com/cankaoxiaoxi/column/zhongguo?limit=21"
+      "url": "http://192.168.1.21:1200/cankaoxiaoxi/column/zhongguo?limit=21"
     },
     {
       "type": "API",
@@ -18,17 +18,17 @@
     {
       "type": "RSS",
       "name": "人人都是产品经理",
-      "url": "https://rsshub.umzzz.com/woshipm/popular?limit=21"
+      "url": "http://192.168.1.21:1200/woshipm/popular?limit=21"
     },
     {
       "type": "RSS",
       "name": "创业邦",
-      "url": "https://rsshub.umzzz.com/cyzone/channel/news?limit=21"
+      "url": "http://192.168.1.21:1200/cyzone/channel/news?limit=21"
     },
     {
       "type": "RSS",
       "name": "少数派",
-      "url": "https://rsshub.umzzz.com/sspai/posts?limit=21"
+      "url": "http://192.168.1.21:1200/sspai/index?limit=21"
     },
     {
       "type": "RSS",

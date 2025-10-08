@@ -115,6 +115,26 @@
             text-overflow: ellipsis;
             word-break: break-all;
         }
+        #back-to-top {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: background-color 0.3s, opacity 0.5s;
+        }
+
+        #back-to-top:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -150,6 +170,7 @@
             </div>
         {% endfor %}
     </div>
+    <button id="back-to-top" title="返回顶部">^</button>
 
 
 
@@ -168,11 +189,26 @@
             evt.currentTarget.className += " active";
         }
 
-        // Open the first tab by default
         document.addEventListener("DOMContentLoaded", function() {
+            // Open the first tab by default
             document.getElementsByClassName("tab-button")[0].click();
+
+            // Back to top button
+            var backToTopButton = document.getElementById("back-to-top");
+
+            window.onscroll = function() {
+                if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                    backToTopButton.style.display = "block";
+                } else {
+                    backToTopButton.style.display = "none";
+                }
+            };
+
+            backToTopButton.onclick = function() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            };
         });
     </script>
-
 </body>
 </html>
