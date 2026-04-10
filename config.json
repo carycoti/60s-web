@@ -3,32 +3,12 @@
     {
       "type": "API",
       "name": "60秒看世界",
-      "url": "http://192.168.1.250:4399/v2/60s"
-    },
-    {
-      "type": "RSS",
-      "name": "参考消息",
-      "url": "http://192.168.1.21:1200/cankaoxiaoxi/column/zhongguo?limit=21"
+      "url": "https://60s.viki.moe/v2/60s"
     },
     {
       "type": "API",
-      "name": "百度热搜",
-      "url": "http://192.168.1.250:4399/v2/baidu/hot"
-    },
-    {
-      "type": "RSS",
-      "name": "人人都是产品经理",
-      "url": "http://192.168.1.21:1200/woshipm/popular?limit=21"
-    },
-    {
-      "type": "RSS",
-      "name": "创业邦",
-      "url": "http://192.168.1.21:1200/cyzone/channel/news?limit=21"
-    },
-    {
-      "type": "RSS",
-      "name": "少数派",
-      "url": "http://192.168.1.21:1200/sspai/index?limit=21"
+      "name": "夸克热搜",
+      "url": "https://60s.viki.moe/v2/quark"
     },
     {
       "type": "RSS",
