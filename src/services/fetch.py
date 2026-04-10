@@ -162,7 +162,6 @@ def _fetch_from_api(source: Dict) -> List[NewsItem]:
                     content = item.get('description') or item.get('desc') or ''
                     url = item.get('url') or item.get('link') or 'http://example.com'
                     image_url = item.get('urlToImage') or item.get('cover')
-
                     items.append(NewsItem(
                         title=item.get('title', 'No Title'),
                         content=content,
