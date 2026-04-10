@@ -162,13 +162,32 @@ def _fetch_from_api(source: Dict) -> List[NewsItem]:
                     content = item.get('description') or item.get('desc') or ''
                     url = item.get('url') or item.get('link') or 'http://example.com'
                     image_url = item.get('urlToImage') or item.get('cover')
+
+                    # --- 核心修复部分开始 ---
+                    source_field = item.get('source')
+                    
+                    # 判断 source 字段的类型
+                    if isinstance(source_field, dict):
+                        # 如果是字典，取其 name 键
+                        extracted_source_name = source_field.get('name')
+                    elif isinstance(source_field, str):
+                        # 如果直接是字符串（如你的样例），直接使用
+                        extracted_source_name = source_field
+                    else:
+                        # 否则使用 URL 域名作为备选
+                        extracted_source_name = source.get('url').split('/')[2]
+                    
+                    # 确定最终显示的名称（优先使用配置中的 name）
+                    display_name = source.get('name') or extracted_source_name
+                    # --- 核心修复部分结束 ---
+
                     items.append(NewsItem(
                         title=item.get('title', 'No Title'),
                         content=content,
                         url=url,
                         image_url=image_url,
-                        source_name=item.get('source', {}).get('name', source.get('url').split('/')[2]),
-                        source_display_name=source.get('name', item.get('source', {}).get('name', source.get('url').split('/')[2])),
+                        source_name=extracted_source_name,
+                        source_display_name=display_name,
                         source_url=source.get('url'),
                         published_date=item.get('publishedAt')
                     ))
